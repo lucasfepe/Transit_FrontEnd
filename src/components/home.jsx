@@ -14,6 +14,46 @@ import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import { API_BASE_URL } from '../config';
 import { makeAuthenticatedRequest } from "../utils";
+import NewSubscriptionDialog from "./NewSubscriptionDialog";
+
+const MOCK_SUBSCRIPTIONS = [
+  {
+    id: 1,
+    routeId: "45",
+    stopId: "1234",
+    stopName: "Downtown Station",
+  },
+  {
+    id: 2,
+    routeId: "67",
+    stopId: "5678",
+    stopName: "Central Square",
+  },
+  {
+    id: 3,
+    routeId: "22",
+    stopId: "9012",
+    stopName: "University Ave",
+  }
+];
+
+// Mock arrival data
+const MOCK_ARRIVALS = {
+  "45-1234": [
+    { minutes: 5 },
+    { minutes: 15 },
+    { minutes: 25 }
+  ],
+  "67-5678": [
+    { minutes: 3 },
+    { minutes: 18 }
+  ],
+  "22-9012": [
+    { minutes: 10 },
+    { minutes: 20 },
+    { minutes: 30 }
+  ]
+};
 
 function Home() {
   const [subscriptions, setSubscriptions] = useState([]);
@@ -21,6 +61,8 @@ function Home() {
   const [anchorEl, setAnchorEl] = useState(null);
   const [selectedSubscription, setSelectedSubscription] = useState(null);
   const [dialogOpen, setDialogOpen] = useState(false);
+
+
 
   const handleNewSubscription = async (subscription) => {
     try {
@@ -73,38 +115,40 @@ function Home() {
 
   const fetchSubscriptions = async () => {
     try {
-      const response = await makeAuthenticatedRequest(`${API_BASE_URL}/subscriptions`, {
-        credentials: 'include',
-        headers: {
-          'Authorization': `Bearer ${localStorage.getItem('token')}` // if using JWT
-        }
-      });
-      const data = await response.json();
-      setSubscriptions(data);
+      // const response = await makeAuthenticatedRequest(`${API_BASE_URL}/subscriptions`, {
+      //   credentials: 'include',
+      //   headers: {
+      //     'Authorization': `Bearer ${localStorage.getItem('token')}` // if using JWT
+      //   }
+      // });
+      // const data = await response.json();
+      // setSubscriptions(data);
+      setSubscriptions(MOCK_SUBSCRIPTIONS);
     } catch (error) {
       console.error('Error fetching subscriptions:', error);
     }
   };
 
   const fetchArrivals = async () => {
-    const newArrivals = {};
-    for (const sub of subscriptions) {
-      try {
-        const response = await makeAuthenticatedRequest(
-          `${API_BASE_URL}/arrivals/${sub.routeId}/${sub.stopId}`,
-          {
-            headers: {
-              'Authorization': `Bearer ${localStorage.getItem('token')}`
-            }
-          }
-        );
-        const data = await response.json();
-        newArrivals[`${sub.routeId}-${sub.stopId}`] = data;
-      } catch (error) {
-        console.error('Error fetching arrivals:', error);
-      }
-    }
-    setArrivals(newArrivals);
+    // const newArrivals = {};
+    // for (const sub of subscriptions) {
+    //   try {
+    //     const response = await makeAuthenticatedRequest(
+    //       `${API_BASE_URL}/arrivals/${sub.routeId}/${sub.stopId}`,
+    //       {
+    //         headers: {
+    //           'Authorization': `Bearer ${localStorage.getItem('token')}`
+    //         }
+    //       }
+    //     );
+    //     const data = await response.json();
+    //     newArrivals[`${sub.routeId}-${sub.stopId}`] = data;
+    //   } catch (error) {
+    //     console.error('Error fetching arrivals:', error);
+    //   }
+    // }
+    // setArrivals(newArrivals);
+    setArrivals(MOCK_ARRIVALS);
   };
 
   return (

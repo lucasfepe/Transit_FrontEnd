@@ -3,6 +3,7 @@ import { Button, TextField, Box, Typography, CircularProgress } from '@mui/mater
 import { Link, useNavigate } from 'react-router-dom'; // useNavigate for redirection
 import { API_BASE_URL } from '../config';
 import { makeAuthenticatedRequest } from "../utils";
+import { useAuth } from "../utils/AuthContext";
 
 
 
@@ -13,6 +14,8 @@ export default function Login() {
   const [error, setError] = useState('');
   const navigate = useNavigate(); // to navigate after login success
 
+  const { login } = useAuth();
+
   useEffect(() => {
     const verifyAuth = async () => {
       try {
@@ -20,6 +23,8 @@ export default function Login() {
           method: 'POST',
           credentials: 'include', // Important for sending cookies
         });
+
+        // If the response is 401, it means the token is invalid or expired
 
         if (response.ok) {
           const data = await response.json();
@@ -47,13 +52,17 @@ export default function Login() {
     try {
       const res = await fetch(`${API_BASE_URL}/auth/login`, {
         method: 'POST',
+        credentials: "include",
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({ email, password }),
       });
 
-      const data = await res.json();
+      if (res.ok) {
+        const data = await res.json();
+        login(data.accessToken);
+      }
 
       if (!res.ok) {
         setError(data.message || 'Login failed');

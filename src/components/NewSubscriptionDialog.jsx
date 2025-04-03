@@ -1,5 +1,5 @@
 // src/components/NewSubscriptionDialog.jsx
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import {
   Dialog,
   DialogTitle,
@@ -85,7 +85,7 @@ function NewSubscriptionDialog({ open, onClose, onSubmit }) {
       </DialogContent>
       <DialogActions>
         <Button onClick={onClose}>Cancel</Button>
-        <Button 
+        <Button
           onClick={handleSubmit}
           disabled={!selectedRoute || !selectedStop}
         >

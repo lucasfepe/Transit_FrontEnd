@@ -9,6 +9,7 @@ import {
 import { Link } from "react-router-dom";
 import { API_BASE_URL } from "../config";
 
+
 export default function Register() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -36,11 +37,11 @@ export default function Register() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
-    setErrors("");
+    setErrors([]);
 
-    const errors = validateRegistration();
+    const errorsCst = validateRegistration();
     if (errors.length > 0) {
-      setErrors(errors);
+      setErrors([...errors, ...errorsCst]);
       setLoading(false);
       return;
     }
@@ -48,23 +49,35 @@ export default function Register() {
     try {
       const res = await fetch(`${API_BASE_URL}/auth/register`, {
         method: "POST",
+        credentials: "include",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({ email, password }),
       });
 
+      console.log('Response headers:', res.headers);
+
       const data = await res.json();
 
       if (!res.ok) {
-        setErrors(data.message || "Registration failed");
+        setErrors([...errors, data.message || "Registration failed"]);
         return;
       }
 
-      // Redirect to login page or automatically log in the user
-      window.location.href = "/login";
+      if (data.idToken && data.accessToken) {
+        // Store the token in localStorage
+        localStorage.setItem('idToken', data.idToken);
+        localStorage.setItem('accessToken', data.accessToken);
+
+        // Redirect to home page instead of login
+        window.location.href = "/home";
+      } else {
+        // Handle case where token is not received
+        console.error("No tokens received in registration response");
+      }
     } catch (err) {
-      setErrors(err.message);
+      setErrors([...errors, err.message]);
     } finally {
       setLoading(false);
     }

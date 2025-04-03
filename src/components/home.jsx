@@ -13,6 +13,7 @@ import AddIcon from "@mui/icons-material/Add";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import { API_BASE_URL } from '../config';
+import { makeAuthenticatedRequest } from "../utils";
 
 function Home() {
   const [subscriptions, setSubscriptions] = useState([]);
@@ -23,7 +24,7 @@ function Home() {
 
   const handleNewSubscription = async (subscription) => {
     try {
-      const response = await fetch(`${API_BASE_URL}/subscriptions`, {
+      const response = await makeAuthenticatedRequest(`${API_BASE_URL}/subscriptions`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -32,7 +33,7 @@ function Home() {
         credentials: 'include',
         body: JSON.stringify(subscription),
       });
-      
+
       if (response.ok) {
         fetchSubscriptions();
         setDialogOpen(false);
@@ -72,7 +73,7 @@ function Home() {
 
   const fetchSubscriptions = async () => {
     try {
-      const response = await fetch(`${API_BASE_URL}/subscriptions`, {
+      const response = await makeAuthenticatedRequest(`${API_BASE_URL}/subscriptions`, {
         credentials: 'include',
         headers: {
           'Authorization': `Bearer ${localStorage.getItem('token')}` // if using JWT
@@ -89,7 +90,7 @@ function Home() {
     const newArrivals = {};
     for (const sub of subscriptions) {
       try {
-        const response = await fetch(
+        const response = await makeAuthenticatedRequest(
           `${API_BASE_URL}/arrivals/${sub.routeId}/${sub.stopId}`,
           {
             headers: {

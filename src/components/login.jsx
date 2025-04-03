@@ -1,7 +1,9 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Button, TextField, Box, Typography, CircularProgress } from '@mui/material';
 import { Link, useNavigate } from 'react-router-dom'; // useNavigate for redirection
 import { API_BASE_URL } from '../config';
+import { makeAuthenticatedRequest } from "../utils";
+
 
 
 export default function Login() {
@@ -11,13 +13,39 @@ export default function Login() {
   const [error, setError] = useState('');
   const navigate = useNavigate(); // to navigate after login success
 
+  useEffect(() => {
+    const verifyAuth = async () => {
+      try {
+        const response = await fetch(`${API_BASE_URL}/auth/refresh`, {
+          method: 'POST',
+          credentials: 'include', // Important for sending cookies
+        });
+
+        if (response.ok) {
+          const data = await response.json();
+          // Store the new access token
+          localStorage.setItem('accessToken', data.accessToken);
+          // Redirect to home
+          navigate('/home');
+        }
+      } catch (error) {
+        // If verification fails, stay on login page
+        console.error('Auth verification failed:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    verifyAuth();
+  }, [navigate]);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
     setError('');
 
     try {
-      const res = await fetch(`${API_BASE_URL}/auth/login`, { 
+      const res = await fetch(`${API_BASE_URL}/auth/login`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

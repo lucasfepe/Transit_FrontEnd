@@ -13,8 +13,10 @@ import AddIcon from "@mui/icons-material/Add";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import { API_BASE_URL } from '../config';
-import { makeAuthenticatedRequest } from "../utils";
+import { useAuth } from "../utils";
 import NewSubscriptionDialog from "./NewSubscriptionDialog";
+import LogoutButton from "./LogoutButton";
+
 
 const MOCK_SUBSCRIPTIONS = [
   {
@@ -61,6 +63,8 @@ function Home() {
   const [anchorEl, setAnchorEl] = useState(null);
   const [selectedSubscription, setSelectedSubscription] = useState(null);
   const [dialogOpen, setDialogOpen] = useState(false);
+  const { makeAuthenticatedRequest } = useAuth();
+
 
 
 
@@ -153,6 +157,7 @@ function Home() {
 
   return (
     <Box sx={{ maxWidth: 600, margin: "auto", padding: 2 }}>
+      <LogoutButton />
       <List>
         {subscriptions.map((subscription) => (
           <ListItem

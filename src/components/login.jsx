@@ -1,38 +1,20 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import { Button, TextField, Box, Typography, CircularProgress } from '@mui/material';
-import { Link, useNavigate } from 'react-router-dom'; // useNavigate for redirection
-import { API_BASE_URL } from '../config';
-import { makeAuthenticatedRequest } from "../utils";
-import { useAuth } from "../utils/AuthContext";
-
-
+import { Link } from 'react-router-dom';
+import { useAuth } from '../utils';
 
 export default function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
-  const navigate = useNavigate(); // to navigate after login success
+  const { login, refresh } = useAuth();
 
-  const { login } = useAuth();
 
   useEffect(() => {
     const verifyAuth = async () => {
       try {
-        const response = await fetch(`${API_BASE_URL}/auth/refresh`, {
-          method: 'POST',
-          credentials: 'include', // Important for sending cookies
-        });
-
-        // If the response is 401, it means the token is invalid or expired
-
-        if (response.ok) {
-          const data = await response.json();
-          // Store the new access token
-          localStorage.setItem('accessToken', data.accessToken);
-          // Redirect to home
-          navigate('/home');
-        }
+        await refresh();
       } catch (error) {
         // If verification fails, stay on login page
         console.error('Auth verification failed:', error);
@@ -42,7 +24,7 @@ export default function Login() {
     };
 
     verifyAuth();
-  }, [navigate]);
+  }, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -50,35 +32,18 @@ export default function Login() {
     setError('');
 
     try {
-      const res = await fetch(`${API_BASE_URL}/auth/login`, {
-        method: 'POST',
-        credentials: "include",
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ email, password }),
-      });
+      // Call the login function from AuthContext with email and password
+      await login(email, password);
+      // No need for navigation here as it's handled in AuthContext
 
-      if (res.ok) {
-        const data = await res.json();
-        login(data.accessToken);
-      }
-
-      if (!res.ok) {
-        setError(data.message || 'Login failed');
-      } else {
-        // If login is successful, save the token (you could use localStorage/sessionStorage or a state management library)
-        localStorage.setItem('authToken', data.token);
-
-        // Redirect user to the dashboard or home page
-        navigate('/home');
-      }
     } catch (err) {
-      setError('Something went wrong!');
+      // Handle any errors thrown from the login function in AuthContext
+      setError(err.message || 'Login failed');
     } finally {
       setLoading(false);
     }
   };
+
 
   return (
     <Box

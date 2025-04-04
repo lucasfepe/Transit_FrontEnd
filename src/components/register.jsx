@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
 import {
   Button,
   TextField,
@@ -8,9 +8,11 @@ import {
 } from "@mui/material";
 import { Link } from "react-router-dom";
 import { API_BASE_URL } from "../config";
+import { useAuth } from '../utils';
 
 
 export default function Register() {
+  const { login } = useAuth();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -67,8 +69,7 @@ export default function Register() {
 
       if (data.idToken && data.accessToken) {
         // Store the token in localStorage
-        localStorage.setItem('idToken', data.idToken);
-        localStorage.setItem('accessToken', data.accessToken);
+        login(data.accessToken)
 
         // Redirect to home page instead of login
         window.location.href = "/home";

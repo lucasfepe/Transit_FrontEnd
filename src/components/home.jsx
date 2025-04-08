@@ -61,8 +61,8 @@ const MOCK_ARRIVALS = {
 
 
 function getColorForTime(minutes) {
-  if (minutes <= 5) return "green";
-  if (minutes <= 10) return "orange";
+  if (minutes > 5) return "green";
+  if (minutes > 3) return "orange";
   return "red";
 }
 
@@ -149,17 +149,30 @@ function Home() {
                 sx={{
                   width: 48,
                   height: 48,
-                  borderRadius: 2,
+                  borderRadius: 2.5,
                   backgroundColor: color,
                   color: "white",
                   fontWeight: "bold",
-                  fontSize: 18,
+                  fontSize: 22,
                   display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
+                  alignItems: "center", // Centers vertically
+                  justifyContent: "center", // Centers horizontally
+                  textAlign: "center",
+                  flexDirection: "column",
                   mr: 2,
                 }}
               >
+                <Box
+                  sx={{
+                    textAlign: "center",
+                    fontSize: 10,
+                    fontWeight: "bold",
+                    color: "white",
+                    mt: 0.5, // Moves the ROUTE word slightly down
+                  }}
+                >
+                  ROUTE
+                </Box>
                 {subscription.routeId}
               </Box>
 

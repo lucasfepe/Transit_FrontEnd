@@ -16,6 +16,7 @@ import { API_BASE_URL } from '../config';
 import { useAuth } from "../utils";
 import NewSubscriptionDialog from "./NewSubscriptionDialog";
 import LogoutButton from "./LogoutButton";
+import LogoIcon from "./LogoIcon";
 
 
 const MOCK_SUBSCRIPTIONS = [
@@ -157,6 +158,7 @@ function Home() {
 
   return (
     <Box sx={{ maxWidth: 600, margin: "auto", padding: 2 }}>
+      <LogoIcon/>
       <LogoutButton />
       <List>
         {subscriptions.map((subscription) => (

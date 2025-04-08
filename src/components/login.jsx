@@ -2,6 +2,7 @@ import { useState, useEffect, useContext } from 'react';
 import { Button, TextField, Box, Typography, CircularProgress } from '@mui/material';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../utils';
+import "../styles/login.css";
 
 export default function Login() {
   const [email, setEmail] = useState('');
@@ -61,10 +62,21 @@ export default function Login() {
         boxShadow: 3,
         borderRadius: 2,
       }}
+      className="loginForm"
     >
-      <Typography variant="h4" gutterBottom>
-        Log in to Your Account
-      </Typography>
+      <Box
+        component="img"
+        src="/logo.png"
+        alt="Logo"
+        sx={{
+          display: 'block',
+          maxWidth: '200px', // Adjust this value based on your needs
+          width: '100%',
+          height: 'auto',
+          marginBottom: 2, // Adds some space between the image and the text below
+        }}
+      />
+
 
       <form onSubmit={handleSubmit} style={{ width: '100%' }}>
         <TextField

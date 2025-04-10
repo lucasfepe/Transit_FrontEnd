@@ -108,8 +108,8 @@ function Home() {
 
   useEffect(() => {
     fetchSubscriptions();
-    const interval = setInterval(fetchArrivals, 60000);
-    return () => clearInterval(interval);
+    fetchArrivals();
+   
   }, []);
 
   const fetchSubscriptions = async () => {
@@ -173,7 +173,10 @@ function Home() {
                 >
                   ROUTE
                 </Box>
-                {subscription.routeId}
+                <Box
+                  sx={{
+                    marginTop: "-6px"
+                  }}>{subscription.routeId}</Box>
               </Box>
 
               <Box sx={{ flexGrow: 1 }}>

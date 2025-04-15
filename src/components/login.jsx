@@ -66,7 +66,7 @@ export default function Login() {
     >
       <Box
         component="img"
-        src="/logo.png"
+        src="/primary_logo.png"
         alt="Logo"
         sx={{
           display: 'block',

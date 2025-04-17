@@ -3,6 +3,7 @@ import { Button, TextField, Box, Typography, CircularProgress } from '@mui/mater
 import { Link } from 'react-router-dom';
 import { useAuth } from '../utils';
 import "../styles/login.css";
+import { LogoIcon } from './LogoIcon'
 
 export default function Login() {
   const [email, setEmail] = useState('');
@@ -64,7 +65,7 @@ export default function Login() {
       }}
       className="loginForm"
     >
-      
+      <LogoIcon/>
       <Typography variant="h4" gutterBottom>
         Log in to Your Account
       </Typography>

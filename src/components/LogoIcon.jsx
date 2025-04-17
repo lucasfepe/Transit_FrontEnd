@@ -4,14 +4,14 @@ import LogoutIcon from "@mui/icons-material/Logout";
 import { useAuth } from "../utils";
 import {Box} from "@mui/material";
 
-const LogoutButton = () => {
+const LogoIcon = () => {
     const { logout } = useAuth();
 
     return (
       
      <Box
      component="img"
-     src="/LogoIcon.png"
+     src="/primary_logo.png"
      alt="Logo"
      sx={{ position: "absolute", top: 16, left: 16,
        display: 'block',
@@ -23,4 +23,4 @@ const LogoutButton = () => {
    />);
 };
 
-export default LogoutButton;
+export default LogoIcon;

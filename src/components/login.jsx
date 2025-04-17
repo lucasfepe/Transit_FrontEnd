@@ -64,19 +64,10 @@ export default function Login() {
       }}
       className="loginForm"
     >
-      <Box
-        component="img"
-        src="/primary_logo.png"
-        alt="Logo"
-        sx={{
-          display: 'block',
-          maxWidth: '200px', // Adjust this value based on your needs
-          width: '100%',
-          height: 'auto',
-          marginBottom: 2, // Adds some space between the image and the text below
-        }}
-      />
-
+      
+      <Typography variant="h4" gutterBottom>
+        Log in to Your Account
+      </Typography>
 
       <form onSubmit={handleSubmit} style={{ width: '100%' }}>
         <TextField

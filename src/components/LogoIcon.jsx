@@ -11,7 +11,7 @@ const LogoutButton = () => {
       
      <Box
      component="img"
-     src="/logo.png"
+     src="/LogoIcon.png"
      alt="Logo"
      sx={{ position: "absolute", top: 16, left: 16,
        display: 'block',
